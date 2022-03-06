@@ -3,6 +3,7 @@ const rootRouter = require("./routes/v1");
 const db = require("./models");
 
 const app = express();
+app.use(express.json());
 
 app.use("/api/v1", rootRouter);
 
