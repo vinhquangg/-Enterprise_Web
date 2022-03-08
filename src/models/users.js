@@ -1,9 +1,16 @@
-const { Model, DataTypes, Sequelize } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
 
 module.exports = (sequelize) => {
-  class User extends Model {}
+  class User extends Model {
+    static associate(db) {
+      this.belongsTo(db.Department, {
+        as: "department",
+        foreignKey: "departmentId",
+      });
+    }
+  }
 
   User.init(
     {

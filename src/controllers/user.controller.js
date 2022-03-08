@@ -1,9 +1,10 @@
-const { User } = require("../models");
+const { User, Department } = require("../models");
 
 const getUsers = async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: { exclude: ["password"] },
+      include: [{ model: Department, as: "department" }],
     });
     res.status(200).json(200, users);
   } catch (error) {
@@ -40,7 +41,7 @@ const createUser = async (req, res) => {
       departmentId,
       role,
     });
-    res.json(201, "Create User Successfully");
+    res.json(201, "Create User Successfully", user);
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);

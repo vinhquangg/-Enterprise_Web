@@ -16,10 +16,6 @@ const sequelize = new Sequelize(
 
 const db = {};
 
-// Khai báo thủ công các model
-// db.User = require("./users")(sequelize);
-// db.Cinema = require("./cinemas")(sequelize);
-
 const basename = path.basename(__filename);
 fs.readdirSync(__dirname)
   .filter((file) => {
