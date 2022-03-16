@@ -7,10 +7,10 @@ module.exports = (sequelize) => {
         as: "category",
         foreignKey: "categoryId",
       });
-      this.belongsTo(db.comment, {
-        as: "comment",
-        foreignKey: "commentId",
-      });
+      this.belongsTo(db.view,{
+        as:"View",
+        foreignKey:"viewId"
+      })
     }
   }
 

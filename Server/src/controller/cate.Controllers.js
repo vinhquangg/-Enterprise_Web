@@ -31,7 +31,6 @@ const getCategoryById = async (req, res) => {
 
 const createCategory = async (req, res) => {
   const { name, description } = req.body;
-  if (!name) return res.status(400, "Name is required");
   try {
     const Cates = await category.create({
       name,
