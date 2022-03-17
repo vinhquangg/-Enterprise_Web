@@ -4,6 +4,7 @@ const userRouter = require("./users.routes");
 const departmentRouter = require("./department.routes");
 const cateRouter = require("./cate.routes");
 const postRouter = require("./posts.routes");
+const commentRouter = require("./comment.routes");
 
 //url: api/v1
 const rootRouter = express.Router();
@@ -16,7 +17,9 @@ rootRouter.use("/users", userRouter);
 rootRouter.use("/department", departmentRouter);
 // categoryRouter
 rootRouter.use("/category", cateRouter);
-// portRouter
+// postRouter
 rootRouter.use("/post", postRouter);
+// commentRouter
+rootRouter.use("/comment", commentRouter);
 
 module.exports = rootRouter;

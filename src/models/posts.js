@@ -7,6 +7,10 @@ module.exports = (sequelize) => {
         as: "category",
         foreignKey: "categoryId",
       });
+      this.belongsTo(db.Comment, {
+        as: "comment",
+        foreignKey: "commentId",
+      });
     }
   }
 
@@ -37,20 +41,17 @@ module.exports = (sequelize) => {
         allowNull: true,
         field: "commentId", //key to access the database
       },
-      viewId: {
+      view: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: "viewId", //key to access the database
+        defaultValue: 0,
       },
       like: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: "like", //key to access the database
+        defaultValue: 0,
       },
       dislike: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: "dislike", //key to access the database
+        defaultValue: 0,
       },
     },
     {

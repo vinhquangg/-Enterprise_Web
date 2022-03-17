@@ -1,11 +1,11 @@
-const { Post, Category } = require("../models");
+const { Post, Category, Comment } = require("../models");
 
 const getPost = async (req, res) => {
   try {
     const posts = await Post.findAll({
       include: [
         { model: Category, as: "category" },
-        // { model: comments, as: "comments" },
+        { model: Comment, as: "comment" },
       ],
     });
     res.status(200).json(200, posts);
@@ -33,11 +33,16 @@ const getPostsById = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, content, categoryId, commentId, viewId } =
+    req.body;
   try {
     const posts = await Post.create({
       title,
       description,
+      content,
+      categoryId,
+      commentId,
+      viewId,
     });
     res.json(201, "Create Posts Successfully", posts);
   } catch (err) {

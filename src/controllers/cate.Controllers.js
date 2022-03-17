@@ -37,7 +37,7 @@ const createCategory = async (req, res) => {
       name,
       description,
     });
-    res.json(201, "Create Category Successfully", Cates);
+    res.status(201).json(201, "Create Category Successfully", Cates);
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
