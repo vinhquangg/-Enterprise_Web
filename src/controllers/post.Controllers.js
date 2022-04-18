@@ -1,14 +1,14 @@
-const { Post, Category, Comment } = require("../models");
+const { Posts, Categorys, Comments } = require("../models");
 
 const getPost = async (req, res) => {
   try {
-    const posts = await Post.findAll({
+    const posts = await Posts.findAll({
       include: [
-        { model: Category, as: "category" },
-        { model: Comment, as: "comment" },
+        { model: Categorys, as: "category" },
+        { model: Comments, as: "comment" },
       ],
     });
-    res.status(200).json(200, posts);
+    res.status(200).json(posts);
   } catch (error) {
     console.log(error);
   }
@@ -22,7 +22,7 @@ const getPostsById = async (req, res) => {
   }
 
   try {
-    const posts = await Post.findByPk(id);
+    const posts = await Posts.findByPk(id);
     if (posts) {
       res.status(200).json(200, posts);
     }
@@ -33,23 +33,36 @@ const getPostsById = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { title, description, content, categoryId, commentId, viewId } =
-    req.body;
+  const { title, description, content, categoryId, commentId } = req.body;
   try {
-    const posts = await Post.create({
+    const posts = await Posts.create({
       title,
       description,
       content,
       categoryId,
       commentId,
-      viewId,
     });
-    res.json(201, "Create Posts Successfully", posts);
+    res.status(200).json({ content: "Create Posts Successfully" });
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
     }
     console.log(err);
+  }
+};
+
+const updatePost = async (req, res) => {
+  try {
+    const updatePost = req.body;
+    const post = await Posts.findOneAndUpdate(
+      { id: updatePost.id },
+      updatePost,
+      { new: true }
+    );
+
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json({ error: err });
   }
 };
 
@@ -59,7 +72,7 @@ const deletePost = async (req, res) => {
     res.status(400).json(400, "Invalid request");
   }
   try {
-    const posts = await Post.findByPk(id);
+    const posts = await Posts.findByPk(id);
     if (!posts) {
       res.status(400).json(400, "Posts not found");
     }
@@ -74,5 +87,6 @@ module.exports = {
   getPost,
   getPostsById,
   createPost,
+  updatePost,
   deletePost,
 };

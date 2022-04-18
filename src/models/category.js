@@ -1,16 +1,16 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Category extends Model {
+  class Categorys extends Model {
     static associate(db) {
-      this.hasMany(db.Post, {
+      this.hasMany(db.Posts, {
         as: "post",
         foreignKey: "categoryId",
       });
     }
   }
 
-  Category.init(
+  Categorys.init(
     {
       name: {
         type: DataTypes.STRING,
@@ -26,10 +26,10 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      modelName: "Category", // Tên model,
+      modelName: "Categorys", // Tên model,
       tableName: "category", //Tên table
       timestamps: false,
     }
   );
-  return Category;
+  return Categorys;
 };

@@ -1,11 +1,11 @@
-const { Posts, Category } = require("../models");
+const { Categorys, Posts } = require("../models");
 
 const getCategory = async (req, res) => {
   try {
-    const Cates = await Category.findAll({
-      // include: [{ model: Posts, as: "posts" }],
+    const Cates = await Categorys.findAll({
+      include: [{ model: Posts, as: "post" }],
     });
-    res.status(200).json(200, Cates);
+    res.status(200).json(Cates);
   } catch (error) {
     console.log(error);
   }
@@ -19,7 +19,7 @@ const getCategoryById = async (req, res) => {
   }
 
   try {
-    const Cates = await Category.findByPk(id);
+    const Cates = await Categorys.findByPk(id);
     if (Cates) {
       res.status(200).json(200, Cates);
     }
@@ -30,14 +30,14 @@ const getCategoryById = async (req, res) => {
 };
 
 const createCategory = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, deadline } = req.body;
   if (!name) return res.status(400, "Name is required");
   try {
-    const Cates = await Category.create({
+    const Cates = await Categorys.create({
       name,
       description,
     });
-    res.status(201).json(201, "Create Category Successfully", Cates);
+    res.status(201).json({ content: "Create Category Successfully" });
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
@@ -52,12 +52,12 @@ const deleteCategory = async (req, res) => {
     res.status(400).json(400, "Invalid request");
   }
   try {
-    const cate = await Category.findByPk(id);
+    const cate = await Categorys.findByPk(id);
     if (!cate) {
       res.status(400).json(400, "Category not found");
     }
-    await Category.destroy({ where: { id } });
-    res.status(204).json(204, "Delete Category Successfully");
+    await Categorys.destroy({ where: { id } });
+    res.status(204).json({ content: "Delete Category Successfully" });
   } catch (error) {
     console.log(error);
   }

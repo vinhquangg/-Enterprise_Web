@@ -3,16 +3,24 @@ const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
 
 module.exports = (sequelize) => {
-  class User extends Model {
+  class Users extends Model {
     static associate(db) {
-      this.belongsTo(db.Department, {
+      this.belongsTo(db.Departments, {
         as: "department",
         foreignKey: "departmentId",
+      });
+      this.hasMany(db.Comments, {
+        as: "comment",
+        foreignKey: "userId",
+      });
+      this.hasMany(db.Posts, {
+        as: "post",
+        foreignKey: "userId",
       });
     }
   }
 
-  User.init(
+  Users.init(
     {
       name: {
         type: DataTypes.STRING,
@@ -43,7 +51,7 @@ module.exports = (sequelize) => {
         },
       },
       departmentId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
         field: "departmentId",
       },
@@ -54,11 +62,11 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      modelName: "User", // model name,
-      tableName: "users",
+      modelName: "Users", // model name,
+      tableName: "user",
       timestamps: false,
     }
   );
 
-  return User;
+  return Users;
 };

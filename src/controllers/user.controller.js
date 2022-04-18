@@ -1,12 +1,12 @@
-const { User, Department } = require("../models");
+const { Users, Departments } = require("../models");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.findAll({
+    const user = await Users.findAll({
       attributes: { exclude: ["password"] },
-      include: [{ model: Department, as: "department" }],
+      include: [{ model: Departments, as: "department" }],
     });
-    res.status(200).json(200, users);
+    res.status(200).json(user);
   } catch (error) {
     console.log(error);
   }
@@ -20,11 +20,12 @@ const getUsersById = async (req, res) => {
   }
 
   try {
-    const user = await User.findByPk(id);
+    const user = await Users.findByPk(id);
     if (user) {
-      res.status(200).json(200, user);
+      res.status(200).json(user);
+    } else {
+      res.status(400).json({ content: "User not found" });
     }
-    res.status(200).json(400, "User not found");
   } catch (error) {
     console.log(error);
   }
@@ -34,14 +35,14 @@ const createUser = async (req, res) => {
   const { name, email, password, departmentId, role } = req.body;
 
   try {
-    const user = await User.create({
+    const user = await Users.create({
       name,
       email,
       password,
       departmentId,
       role,
     });
-    res.json(201, "Create User Successfully", user);
+    res.status(201).json({ content: "Create User Successfully" });
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
@@ -61,12 +62,12 @@ const updateUser = async (req, res) => {
   const newUser = { name, email, departmentId, role };
 
   try {
-    await User.update(newUser, {
+    await Users.update(newUser, {
       where: {
         id,
       },
     });
-    res.status(200).json(200, "Update User Successfully");
+    res.status(201).json({ content: "Update User Successfully" });
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
@@ -78,15 +79,15 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const id = Number(req.params.id);
   if (!id) {
-    res.status(400).json(400, "Invalid request");
+    res.status(400).json({ content: "Invalid request" });
   }
   try {
-    const user = await User.findByPk(id);
+    const user = await Users.findByPk(id);
     if (!user) {
-      res.status(400).json(400, "User not found");
+      res.status(400).json({ content: "User not found" });
     }
-    await User.destroy({ where: { id } });
-    res.status(204).json(204, "Delete User Successfully");
+    await Users.destroy({ where: { id } });
+    res.status(204).json({ content: "Delete User Successfully" });
   } catch (error) {
     console.log(error);
   }

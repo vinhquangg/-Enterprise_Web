@@ -1,9 +1,9 @@
-const { Posts, Comment } = require("../models");
+const { Posts, Comments } = require("../models");
 
 const getComment = async (req, res) => {
   try {
-    const Cates = await Comment.findAll({
-      // include: [{ model: Posts, as: "posts" }],
+    const Cates = await Comments.findAll({
+      include: [{ model: Posts, as: "post" }],
     });
     res.status(200).json(200, Cates);
   } catch (error) {
@@ -12,13 +12,14 @@ const getComment = async (req, res) => {
 };
 
 const createComment = async (req, res) => {
-  const { content } = req.body;
-  //   if (!content) return res.status(400, "Name is required");
+  const { content, postId, userId } = req.body;
   try {
-    const Comments = await Comment.create({
+    const Cmt = await Comments.create({
       content,
+      postId,
+      userId,
     });
-    res.status(201).json(201, "Create Comment Successfully", Comments);
+    res.status(201).json({ content: "Create Comment Successfully" });
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);

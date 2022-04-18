@@ -1,20 +1,24 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Post extends Model {
+  class Posts extends Model {
     static associate(db) {
-      this.belongsTo(db.Category, {
+      this.belongsTo(db.Categorys, {
         as: "category",
         foreignKey: "categoryId",
       });
-      this.belongsTo(db.Comment, {
+      this.hasMany(db.Comments, {
         as: "comment",
-        foreignKey: "commentId",
+        foreignKey: "postId",
+      });
+      this.belongsTo(db.Users, {
+        as: "user",
+        foreignKey: "userId",
       });
     }
   }
 
-  Post.init(
+  Posts.init(
     {
       title: {
         type: DataTypes.STRING,
@@ -31,36 +35,28 @@ module.exports = (sequelize) => {
         allowNull: true,
         field: "content", //key to access the database
       },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: "userId", //key to access the database
+      },
       categoryId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: true,
         field: "categoryId", //key to access the database
       },
-      commentId: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        field: "commentId", //key to access the database
-      },
       view: {
-        type: DataTypes.STRING,
-        defaultValue: 0,
-      },
-      like: {
-        type: DataTypes.STRING,
-        defaultValue: 0,
-      },
-      dislike: {
         type: DataTypes.STRING,
         defaultValue: 0,
       },
     },
     {
       sequelize,
-      modelName: "Post", // model name,
+      modelName: "Posts", // model name,
       tableName: "post",
       timestamps: false,
     }
   );
 
-  return Post;
+  return Posts;
 };

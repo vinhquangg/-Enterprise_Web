@@ -1,11 +1,11 @@
-const { User, Department } = require("../models");
+const { Users, Departments } = require("../models");
 
 const getDepartments = async (req, res) => {
   try {
-    const departments = await Department.findAll({
-      include: [{ model: User, as: "user" }],
+    const departments = await Departments.findAll({
+      include: [{ model: Users, as: "user" }],
     });
-    res.status(200).json(200, departments);
+    res.status(200).json(departments);
   } catch (error) {
     console.log(error);
   }
@@ -19,9 +19,9 @@ const getDepartmentsById = async (req, res) => {
   }
 
   try {
-    const department = await Department.findByPk(id);
+    const department = await Departments.findByPk(id);
     if (department) {
-      res.status(200).json(200, department);
+      res.status(200).json(department);
     }
     res.status(200).json(400, "Department not found");
   } catch (error) {
@@ -33,10 +33,10 @@ const createDepartment = async (req, res) => {
   const { name } = req.body;
 
   try {
-    const department = await Department.create({
+    const department = await Departments.create({
       name,
     });
-    res.status(201).json(201, department.id);
+    res.status(201).json(201, "Create Department Successfully");
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       res.status(400).json(400, err.errors);
@@ -51,11 +51,11 @@ const deleteDepartment = async (req, res) => {
     res.status(400).json(400, "Invalid request");
   }
   try {
-    const department = await Department.findByPk(id);
+    const department = await Departments.findByPk(id);
     if (!department) {
       res.status(400).json(400, "Department not found");
     }
-    await Department.destroy({ where: { id } });
+    await Departments.destroy({ where: { id } });
     res.status(204).json(204, "Delete Department Successfully");
   } catch (error) {
     console.log(error);

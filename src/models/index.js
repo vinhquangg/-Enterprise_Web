@@ -8,13 +8,20 @@ const sequelize = new Sequelize(
   config.db_user,
   config.db_password,
   {
-    host: config.db_host,
     dialect: config.db_dialect,
+    host: config.db_host,
     port: config.db_port,
   }
 );
 
 const db = {};
+
+// Khai báo thủ công các model
+// db.Users = require("./user")(sequelize);
+// db.Posts = require("./post")(sequelize);
+// db.Categorys = require("./category")(sequelize);
+// db.Comments = require("./comment")(sequelize);
+// db.Departments = require("./department")(sequelize);
 
 const basename = path.basename(__filename);
 fs.readdirSync(__dirname)
@@ -24,8 +31,8 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach((file) => {
-    const model = require(path.join(__dirname, file))(sequelize);
-    db[model.name] = model;
+    const models = require(path.join(__dirname, file))(sequelize);
+    db[models.name] = models;
   });
 
 Object.keys(db).forEach((model) => {
