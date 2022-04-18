@@ -1,29 +1,44 @@
-const { Sequelize, Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class comments extends Model {
+  class Comments extends Model {
     static associate(db) {
-      this.hasMany(db.posts, {
-        as: "comment",
-        foreignKey: "commentId",
+      this.belongsTo(db.Posts, {
+        as: "post",
+        foreignKey: "postId",
+      });
+      this.belongsTo(db.Users, {
+        as: "user",
+        foreignKey: "userId",
       });
     }
   }
 
-  comments.init(
+  Comments.init(
     {
-      comment: {
+      content: {
         type: DataTypes.STRING,
-        allowNull: false,
-        required: true,
+        allowNull: true,
+        field: "content", //key to access the database
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: "postId", //key to access the database
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: "userId", //key to access the database
       },
     },
     {
       sequelize,
-      modelName: "comments", // Tên model,
-      tableName: "Comments", //Tên table
-      timestamps: true,
+      modelName: "Comments", // model name,
+      tableName: "comment",
+      timestamps: false,
     }
   );
-  return comments;
+
+  return Comments;
 };
